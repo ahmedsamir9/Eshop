@@ -14,6 +14,9 @@ using System.Threading.Tasks;
 
 namespace ProjectMVC
 {
+    /// <summary>
+    /// comment
+    /// </summary>
     public class Startup
     {
         public Startup(IConfiguration configuration)
