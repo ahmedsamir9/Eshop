@@ -33,6 +33,7 @@ namespace ProjectMVC.Controllers
                 //map from vm to model
                 IdentityRole myRole = new IdentityRole() { Name = role.Name };
                 //save in db
+                //kda tmam
                 IdentityResult result = await RoleManager.CreateAsync(myRole);
                 if (result.Succeeded)
                     //return RedirectToAction("GetAll");
