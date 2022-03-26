@@ -6,8 +6,8 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="5.0.13" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="5.0.13" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.13">
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="5.0.12" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.12">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
@@ -16,6 +16,7 @@
 
   <ItemGroup>
     <Folder Include="wwwroot\assets\images\" />
+    <Folder Include="wwwroot\images\" />
   </ItemGroup>
 
 </Project>
