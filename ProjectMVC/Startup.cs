@@ -7,6 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using ProjectMVC.Models;
+using ProjectMVC.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,6 +15,9 @@ using System.Threading.Tasks;
 
 namespace ProjectMVC
 {
+    /// <summary>
+    /// comment
+    /// </summary>
     public class Startup
     {
         public Startup(IConfiguration configuration)
@@ -30,6 +34,8 @@ namespace ProjectMVC
             services.AddDbContext<ShopDBContext>(
                option => option.UseSqlServer(Configuration.GetConnectionString("EShopDBCon")));
             services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<ShopDBContext>();
+            services.AddScoped<ICategoryRepository, CatgoryRepoService>();
+            services.AddScoped<IProductRepository, ProductRepoService>();
 
 
         }
