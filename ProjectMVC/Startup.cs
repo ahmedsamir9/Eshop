@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -10,6 +11,7 @@ using ProjectMVC.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace ProjectMVC
@@ -30,8 +32,23 @@ namespace ProjectMVC
             services.AddDbContext<ShopDBContext>(
                option => option.UseSqlServer(Configuration.GetConnectionString("EShopDBCon")));
             services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<ShopDBContext>();
+            services.AddAuthentication( options =>
+            {
+                options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+            })
+                .AddCookie(options =>
+                {
+                    options.LoginPath = "/Account/Login";
+                })
+        .AddGoogle(options =>
+        {
+            IConfigurationSection googleAuthNSection =
+                  Configuration.GetSection("Authentication:Google");
+            options.ClientId = "269971474734-mtf6t0r602l1usql3rk0dl6s98e8dcgf.apps.googleusercontent.com";
+            options.ClientSecret = "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";
+             
 
-
+        });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
