@@ -22,7 +22,7 @@ namespace ProjectMVC.Controllers
             RoleManager = _RoleManager;
             Context = context;
         }
-        public IActionResult SignUp(string ReturnUrl = "~/Home/Home")
+        public IActionResult SignUp(string ReturnUrl = "~/Home/Index")
         {
          
             ViewBag.ReturnUrl = ReturnUrl;
@@ -30,7 +30,7 @@ namespace ProjectMVC.Controllers
         }
         [HttpPost]
         public async Task<IActionResult> SignUp(Client account,
-            string ReturnUrl = "~/Home/Home")
+            string ReturnUrl = "~/Home/Index")
         {
             if(ModelState.IsValid)
             {
@@ -63,13 +63,13 @@ namespace ProjectMVC.Controllers
             return View(account);
         }
         [HttpGet]
-        public IActionResult Login(string ReturnUrl = "~/Home/Home")
+        public IActionResult Login(string ReturnUrl = "~/Home/Index")
         {
             ViewData["ReturnUrl"] = ReturnUrl;
             return View();
         }
         public async Task<IActionResult> Login(LoginVM account,
-           string ReturnUrl = "~/Home/Home")
+           string ReturnUrl = "~/Home/Index")
         {
             if (ModelState.IsValid)
             {
@@ -177,7 +177,7 @@ namespace ProjectMVC.Controllers
         }
         [HttpPost]
         public async Task<IActionResult> SignUpAdmin(Client account,
-            string ReturnUrl = "~/Home/Home")
+            string ReturnUrl = "~/Home/Index")
         {
             if (ModelState.IsValid== true)
             {

@@ -8,6 +8,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using ProjectMVC.Models;
+using ProjectMVC.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,6 +17,9 @@ using System.Threading.Tasks;
 
 namespace ProjectMVC
 {
+    /// <summary>
+    /// comment
+    /// </summary>
     public class Startup
     {
         public Startup(IConfiguration configuration)
@@ -32,6 +36,7 @@ namespace ProjectMVC
             services.AddDbContext<ShopDBContext>(
                option => option.UseSqlServer(Configuration.GetConnectionString("EShopDBCon")));
             services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<ShopDBContext>();
+
             services.AddAuthentication( options =>
             {
                 options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
@@ -47,6 +52,8 @@ namespace ProjectMVC
             options.ClientId = "269971474734-mtf6t0r602l1usql3rk0dl6s98e8dcgf.apps.googleusercontent.com";
             options.ClientSecret = "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";
              
+            services.AddScoped<ICategoryRepository, CatgoryRepoService>();
+            services.AddScoped<IProductRepository, ProductRepoService>();
 
         });
         }
