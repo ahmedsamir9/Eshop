@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using ProjectMVC.Models;
 using ProjectMVC.ViewModel;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace ProjectMVC.Controllers
@@ -87,6 +88,72 @@ namespace ProjectMVC.Controllers
                 ModelState.AddModelError(string.Empty, "invalid account");
             }
             return View(account);
+        }
+        [HttpPost]
+        public IActionResult ExternalLogin(string returnUrl = null)
+        {
+            // Request a redirect to the external login provider.
+            string provider = "Google";
+            var redirectUrl = Url.Action(nameof(ExternalLoginCallback), "Account", new { returnUrl });
+            var properties = SignInManager.ConfigureExternalAuthenticationProperties(provider, redirectUrl);
+            return Challenge(properties, provider);
+        }
+        [TempData]
+        public string ErrorMessage { get; set; }
+        [HttpGet]
+ 
+        public async Task<IActionResult> ExternalLoginCallback(string returnUrl = null, string remoteError = null)
+        {
+            if (remoteError != null)
+            {
+                ErrorMessage = $"Error from external provider: {remoteError}";
+                return RedirectToAction(nameof(ExternalLogin));
+            }
+            var info = await SignInManager.GetExternalLoginInfoAsync();
+            if (info == null)
+            {
+                return RedirectToAction(nameof(ExternalLogin));
+            }
+            // Sign in the user with this external login provider if the user already has a login.
+            var result = await SignInManager.ExternalLoginSignInAsync(info.LoginProvider, info.ProviderKey, isPersistent: false, bypassTwoFactor: true);
+            if (result.Succeeded)
+            {
+                return RedirectToAction("Index", "Home");
+                //_logger.LogInformation("User logged in with {Name} provider.", info.LoginProvider);
+                //return RedirectToAction(nameof(returnUrl));
+            }
+            else
+            {
+                string email = string.Empty;
+                string firstName = string.Empty;
+                string lastName = string.Empty;
+                string profileImage = string.Empty;
+                //get google login user infromation like that.
+                if (info.Principal.HasClaim(c => c.Type == ClaimTypes.Email))
+                {
+                    email = info.Principal.FindFirstValue(ClaimTypes.Email);
+                }
+                if (info.Principal.HasClaim(c => c.Type == ClaimTypes.GivenName))
+                {
+                    firstName = info.Principal.FindFirstValue(ClaimTypes.GivenName);
+                }
+                if (info.Principal.HasClaim(c => c.Type == ClaimTypes.GivenName))
+                {
+                    lastName = info.Principal.FindFirstValue(ClaimTypes.Surname);
+                }
+                var user = new IdentityUser { UserName = email, Email = email, EmailConfirmed = true };
+                var result2 = await UserManager.CreateAsync(user);
+                if (result2.Succeeded)
+                {
+                    result2 = await UserManager.AddLoginAsync(user, info);
+                    if (result2.Succeeded)
+                    {
+                        //do somethng here
+                        return RedirectToAction("Index", "Home");
+                    }
+                }
+                return View("Login");
+            }
         }
         [HttpGet]
         public async Task<IActionResult> Logout()

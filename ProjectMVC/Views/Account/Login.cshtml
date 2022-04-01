@@ -46,6 +46,18 @@
               </div>
               <input type="submit" value="Login" class="btn btn-block btn-primary">
             </form>
+            <div class="row">
+             <div class="col-sm-12">
+               <div class="justify-content-center">
+            <form asp-action="ExternalLogin" asp-controller="Account">
+                <h4 class="text-center margin-top">Login With Google Account</h4>
+                <hr />
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                <input type="text" hidden="hidden" name="returnUrl" value="/Home/Index" class="currenctURL1" id="currentURL1" />
+                <input type="submit" value="Login With Google" class="btn btn-success" />
+            </form>
+        </div>
+    </div></div>
             </div>
           </div>
           
