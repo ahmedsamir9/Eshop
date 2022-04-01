@@ -9,9 +9,11 @@ using ProjectMVC.Models;
 using System.IO;
 using Microsoft.AspNetCore.Hosting;
 using ProjectMVC.Services;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ProjectMVC.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class ProductsController : Controller
     {
        
@@ -62,6 +64,7 @@ namespace ProjectMVC.Controllers
 
 
         // GET: Products
+        [AllowAnonymous]
         public ActionResult Index()
         {
             var prdList = ProductContext.GetAll();
@@ -69,6 +72,7 @@ namespace ProjectMVC.Controllers
         }
 
         // GET: Products/Details/5
+        [AllowAnonymous]
         public ActionResult Details(int id)
         {
             var product =ProductContext.GetDetails(id);

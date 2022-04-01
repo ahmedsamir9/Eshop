@@ -28,6 +28,11 @@ namespace ProjectMVC.Services
             return Context.categories.ToList();
         }
 
+        public Category GetByName(string Name)
+        {
+            return Context.categories.FirstOrDefault(c => c.Name == Name);  
+        }
+
         public Category GetDetails(int id)
         {
       

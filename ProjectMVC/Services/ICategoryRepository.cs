@@ -7,6 +7,7 @@ namespace ProjectMVC.Services
     {
         public List<Category> GetAll();
         public Category GetDetails(int id);
+        public Category GetByName(string Name);
         public void Insert(Category cat);
         public void Update(int id, Category category);
         public void Delete(int id);

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +11,7 @@ using ProjectMVC.Services;
 
 namespace ProjectMVC.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class CategoriesController : Controller
     {
         private readonly ICategoryRepository _context;
@@ -20,12 +22,14 @@ namespace ProjectMVC.Controllers
         }
 
         // GET: Categories
+        [AllowAnonymous]
         public ActionResult  Index()
         {
             return View(_context.GetAll());
         }
 
         // GET: Categories/Details/5
+        [AllowAnonymous]
         public ActionResult Details(int id)
         {
             var category = _context.GetDetails(id);
@@ -115,6 +119,29 @@ namespace ProjectMVC.Controllers
             _context.Delete(id);
            
             return RedirectToAction(nameof(Index));
+        }
+        public IActionResult Exsist(string Name, int id)
+        {
+            if (id == 0)
+            {
+                var category = _context.GetDetails(id);
+                if (category == null)
+                    return Json(true);
+                return Json(false);
+
+            }
+            else
+            {
+                var category = _context.GetByName(Name);
+                if (category == null)
+                    return Json(true);
+                else
+                {
+                    if (category.Id == id)
+                        return Json(true);
+                    return Json(false);
+                }
+            }
         }
 
     }
