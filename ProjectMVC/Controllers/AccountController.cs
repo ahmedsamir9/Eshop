@@ -55,7 +55,7 @@ namespace ProjectMVC.Controllers
                   await UserManager.AddToRoleAsync(user, "Client");
                     //create cookie for registeration
                     await SignInManager.SignInAsync(user, account.RememberMe);
-                    return LocalRedirect(ReturnUrl);
+                    return RedirectToAction("Index", "Home");
                 }
                 foreach (var error in result.Errors)
                     ModelState.AddModelError(string.Empty, error.Description);
@@ -81,7 +81,7 @@ namespace ProjectMVC.Controllers
                     Microsoft.AspNetCore.Identity.SignInResult result =
                         await SignInManager.PasswordSignInAsync(user, account.Password, account.RememberMe, false);
                     if (result.Succeeded)
-                        return LocalRedirect(ReturnUrl);
+                        return RedirectToAction("Index", "Home");
                     //present error to client that is resulted from error in password
                     ModelState.AddModelError(string.Empty, "invalid password");
                 }
@@ -94,6 +94,15 @@ namespace ProjectMVC.Controllers
         {
             // Request a redirect to the external login provider.
             string provider = "Google";
+            var redirectUrl = Url.Action(nameof(ExternalLoginCallback), "Account", new { returnUrl });
+            var properties = SignInManager.ConfigureExternalAuthenticationProperties(provider, redirectUrl);
+            return Challenge(properties, provider);
+        }
+        [HttpPost]
+        public IActionResult ExternalLogin2(string returnUrl = null)
+        {
+            // Request a redirect to the external login provider.
+            string provider = "Facebook";
             var redirectUrl = Url.Action(nameof(ExternalLoginCallback), "Account", new { returnUrl });
             var properties = SignInManager.ConfigureExternalAuthenticationProperties(provider, redirectUrl);
             return Challenge(properties, provider);
@@ -155,6 +164,12 @@ namespace ProjectMVC.Controllers
                 return View("Login");
             }
         }
+       
+
+
+
+
+
         [HttpGet]
         public async Task<IActionResult> Logout()
         {
@@ -202,7 +217,7 @@ namespace ProjectMVC.Controllers
                      await UserManager.AddToRoleAsync(user, "Admin");
                     //create cookie for registeration
                     await SignInManager.SignInAsync(user, account.RememberMe);
-                    return LocalRedirect(ReturnUrl);
+                    return RedirectToAction("Index", "Home");
                 }
                 foreach (var error in result.Errors)
                     ModelState.AddModelError(string.Empty, error.Description);
