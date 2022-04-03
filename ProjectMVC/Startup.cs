@@ -54,7 +54,8 @@ namespace ProjectMVC
              
             services.AddScoped<ICategoryRepository, CatgoryRepoService>();
             services.AddScoped<IProductRepository, ProductRepoService>();
-
+            services.AddScoped<GenericRepository<Product>,ProductRepository>();
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
         });
         }
 

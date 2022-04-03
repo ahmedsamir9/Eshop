@@ -21,7 +21,7 @@ namespace ProjectMVC.Services
 
         public List<Product> GetAll()
         {
-            return Context.products.Include(p=>p.Category).ToList();
+           return Context.products.Include(p => p.Category).ToList();
         }
 
         public Product GetDetails(int id)
@@ -47,5 +47,7 @@ namespace ProjectMVC.Services
             Context.SaveChanges();
 
         }
+
+        
     }
 }
