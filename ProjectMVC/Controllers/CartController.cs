@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Identity;
 using System.Security.Claims;
 using ProjectMVC.Services;
 using System;
+using ProjectMVC.Models;
 
 namespace ProjectMVC.Controllers
 {
@@ -32,7 +33,7 @@ namespace ProjectMVC.Controllers
         // GET: Cart/Remove/productID
         
         [Route("Cart/Remove/{productID:int}")]
-        public ActionResult Remove(int productID)
+        public ActionResult Remove([FromRoute] int productID)
         {
             _cartRepository.RemoveItem(clientID, productID);
             return new EmptyResult();   
@@ -48,29 +49,29 @@ namespace ProjectMVC.Controllers
 
 
 
-        [HttpPost]
         //[Route("Cart/Increase/{productID:int}")]
-        // POST: Cart/Increase/productID
-        public ActionResult Increase([FromRoute]int productID)
+        // POST: Cart/Increase
+        [HttpPost]
+        public ActionResult Increase([FromBody] Cart c)
         {
-            _cartRepository.IncreaseItemByOne(clientID, productID);
+            _cartRepository.IncreaseItemByOne(clientID, c.ProductId);
             return new EmptyResult();
         }
 
-        [HttpPost]
         //[Route("Cart/Decrease/{productID:int}")]
-        // POST: Cart/Decrease/productID
-        public ActionResult Decrease([FromRoute] int productID)
+        // POST: Cart/Decrease
+        [HttpPost]
+        public ActionResult Decrease([FromBody] Cart c)
         {
-            _cartRepository.DecreaseItemByOne(clientID, productID);
+            _cartRepository.DecreaseItemByOne(clientID, c.ProductId);
             return new EmptyResult();
         }
 
 
-        [HttpPost]
-        //[Route("Cart/Add/{productID:int}")]
         // POST: Cart/Add/ProductID
-        public ActionResult Add([FromBody] int productID)
+        [HttpPost]
+        [Route("Cart/Add/{productID:int}")]
+        public ActionResult Add([FromRoute] int productID)
         {
             try
             {

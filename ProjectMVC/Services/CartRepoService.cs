@@ -1,6 +1,7 @@
 ﻿using ProjectMVC.Models;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
 namespace ProjectMVC.Services
 {
     public class CartRepoService : ICartRepository
@@ -15,7 +16,7 @@ namespace ProjectMVC.Services
         public void AddItem(string clientID, int productID)
         {
             Product product = context.products.Find(productID);
-
+           
             Cart cart = new Cart();
             cart.ClientId = clientID;
             cart.ProductId = productID;
@@ -51,7 +52,7 @@ namespace ProjectMVC.Services
 
         public List<Cart> GetAllItems(string clientID)
         {
-            return context.carts.Where(c => c.ClientId == clientID).ToList();
+            return context.carts.Where(c => c.ClientId == clientID).Include(c => c.Product).ToList();
         }
 
         public void IncreaseItemByOne(string clientID, int productID)
