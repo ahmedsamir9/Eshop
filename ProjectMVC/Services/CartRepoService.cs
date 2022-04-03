@@ -1,0 +1,74 @@
+﻿using ProjectMVC.Models;
+using System.Collections.Generic;
+using System.Linq;
+namespace ProjectMVC.Services
+{
+    public class CartRepoService : ICartRepository
+    {
+        private readonly ShopDBContext context;
+
+        public CartRepoService(ShopDBContext context)
+        {
+            this.context = context;
+        }
+
+        public void AddItem(string clientID, int productID)
+        {
+            Product product = context.products.Find(productID);
+
+            Cart cart = new Cart();
+            cart.ClientId = clientID;
+            cart.ProductId = productID;
+            cart.dateTime = System.DateTime.Now;
+            cart.Quntity = 1;
+
+            // represents total price of this item inside cart
+            cart.TotalPrice = product.Price;
+
+            context.carts.Add(cart);
+            context.SaveChanges();
+
+        }
+
+        public void ClearCart(string clientID)
+        {
+            var allItems = context.carts.Where(c => c.ClientId == clientID).ToList();
+            context.RemoveRange(allItems);
+            context.SaveChanges();
+        }
+
+        public void DecreaseItemByOne(string clientID, int productID)
+        {
+            Product product = context.products.Find(productID);
+            Cart cart = context.carts.FirstOrDefault(c => c.ClientId == clientID && c.ProductId == productID);
+            cart.Quntity--;
+            cart.TotalPrice -= product.Price;
+
+            if(cart.Quntity == 0)
+                context.carts.Remove(cart);
+            context.SaveChanges(true);
+        }
+
+        public List<Cart> GetAllItems(string clientID)
+        {
+            return context.carts.Where(c => c.ClientId == clientID).ToList();
+        }
+
+        public void IncreaseItemByOne(string clientID, int productID)
+        {
+            Product product = context.products.Find(productID);
+            Cart cart = context.carts.FirstOrDefault(c => c.ClientId == clientID && c.ProductId == productID);
+            cart.Quntity++;
+            cart.TotalPrice += product.Price;
+
+            context.SaveChanges(true);
+        }
+
+        public void RemoveItem(string clientID, int productID)
+        {
+            Cart cart = context.carts.FirstOrDefault(c => c.ClientId == clientID && c.ProductId == productID);
+            context.carts.Remove(cart);
+            context.SaveChanges();
+        }
+    }
+}

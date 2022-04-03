@@ -33,29 +33,29 @@ namespace ProjectMVC
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
-            services.AddDbContext<ShopDBContext>(
-               option => option.UseSqlServer(Configuration.GetConnectionString("EShopDBCon")));
+            services.AddDbContext<ShopDBContext>(option => option.UseSqlServer(Configuration.GetConnectionString("EShopDBCon")));
             services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<ShopDBContext>();
+
+            services.AddScoped<ICategoryRepository, CatgoryRepoService>();
+            services.AddScoped<IProductRepository, ProductRepoService>();
+            services.AddScoped<ICartRepository, CartRepoService>();
+
 
             services.AddAuthentication( options =>
             {
                 options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
             })
-                .AddCookie(options =>
-                {
-                    options.LoginPath = "/Account/Login";
-                })
-        .AddGoogle(options =>
-        {
-            IConfigurationSection googleAuthNSection =
-                  Configuration.GetSection("Authentication:Google");
-            options.ClientId = "269971474734-mtf6t0r602l1usql3rk0dl6s98e8dcgf.apps.googleusercontent.com";
-            options.ClientSecret = "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";
+            .AddCookie(options =>
+            {
+                options.LoginPath = "/Account/Login";
+            })
+            .AddGoogle(options =>
+            {
+                IConfigurationSection googleAuthNSection = Configuration.GetSection("Authentication:Google");
+                options.ClientId = "269971474734-mtf6t0r602l1usql3rk0dl6s98e8dcgf.apps.googleusercontent.com";
+                options.ClientSecret = "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";
              
-            services.AddScoped<ICategoryRepository, CatgoryRepoService>();
-            services.AddScoped<IProductRepository, ProductRepoService>();
-
-        });
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
