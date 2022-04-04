@@ -1,0 +1,21 @@
+﻿@using ProjectMVC.ViewModel
+@model ProductVM
+
+        <div class="col-lg-3 col-md-4 col-sm-6">
+        <div class="product__item">
+            <div class="product__item__pic set-bg" data-setbg="~/img/@Model.ImgPath">
+           
+            @if (@Model.NumInStock == 0)
+            {
+            <div class="label stockout">out of stock</div>     
+            }
+              <ul class="product__hover">
+                    <li><a href="~/img/@Model.ImgPath" class="image-popup"><span class="arrow_expand"></span></a></li>
+                </ul>
+            </div>
+            <div class="product__item__text">
+                <h6><a href="#">@Model.Name</a></h6>
+                <div class="product__price">$ @Model.Price</div>
+            </div>
+        </div>
+    </div>

@@ -10,10 +10,12 @@ using System.IO;
 using Microsoft.AspNetCore.Hosting;
 using ProjectMVC.Services;
 using Microsoft.AspNetCore.Authorization;
+using ProjectMVC.ViewModel;
 
 namespace ProjectMVC.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    //[Authorize(Roles = "Admin")]
+
     public class ProductsController : Controller
     {
        
@@ -179,7 +181,37 @@ namespace ProjectMVC.Controllers
            
             return RedirectToAction(nameof(Index));
         }
+        [AllowAnonymous]
+        public IActionResult ProductDetails(int id)
+        {
 
-       
+            ProductVM product = new ProductVM()
+            {
+                Id = 1,
+                Name = "SSSSSSSSSSs",
+                ImgPath = "product/product-3.jpg",
+                Description = "ssssssssssssssssssssssssssssssssssssssssssssssssssss"  ,
+                NumInStock = 1,
+                Price = 500
+            };
+            ProductVM product1 = new ProductVM()
+            {
+                Id = 1,
+                Name = "SSSSSSSSSSs",
+                ImgPath = "product/product-4.jpg",
+                Description = "ssssssssssssssssssssssssssssssssssssssssssssssssssss",
+                NumInStock = 0,
+                Price = 500
+            };
+            var relatedProducts = new List<ProductVM>();
+            relatedProducts.Add(product);
+            relatedProducts.Add(product);
+            relatedProducts.Add(product);
+           
+            relatedProducts.Add(product1);
+            ViewBag.RelatedProducts = relatedProducts; 
+            return View("ProductDetails",product);
+        }
+
     }
 }

@@ -3,9 +3,9 @@ using System.Collections.Generic;
 
 namespace ProjectMVC.Services
 {
-    public class ProductRepository : GenericRepository<Product>
+    public class ProductRepositoryy : GenericRepository<Product>
     {
-        public ProductRepository(ShopDBContext context) : base(context) { }
+        public ProductRepositoryy(ShopDBContext context) : base(context) { }
        
     }
 }
