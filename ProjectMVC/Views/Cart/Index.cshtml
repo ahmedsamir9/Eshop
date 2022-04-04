@@ -5,117 +5,96 @@
 }
 
 
-<div class="container-fluid m-0 p-5" style="height: 50vh">
-    <!--Header -->
-    <h5> 
-        <a href="/Home">Home</a> >
-        <a href="#">Shopping Cart</a> 
-    </h5>
 
+<!--template code-->
 
-    <!--Main Content-->
-    <div class="row">
-
-        <!--Products-->
-        <div class = "col-9">
-            
-            <div class="py-3">
-                <input type="button" class="btn btn-danger" value="Clear Cart" onclick="clearCart()" />
+    <!-- Breadcrumb Begin -->
+    <div class="breadcrumb-option">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="breadcrumb__links">
+                        <a href="./index.html"><i class="fa fa-home"></i> Home</a>
+                        <span>Shopping cart</span>
+                    </div>
+                </div>
             </div>
-
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>
-                            @Html.DisplayNameFor(model => model.Product)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.dateTime)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.Quntity)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.TotalPrice)
-                        </th>
-                    </tr>
-                </thead>
-
-                <tbody>
-                    @foreach (var item in Model) {
-                            <tr>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Product.Description)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.dateTime)
-                                </td>
-                                <td>
-                                    <center>
-
-                                    <span class="btn btn-outline-danger btn-sm mx-4" onclick="decrease('@item.ProductId')">
-                                        <i class="fa fa-minus fa-xs"></i>
-                                    </span>
-
-                                    <span class="h4">
-                                        @Html.DisplayFor(modelItem => item.Quntity)
-                                    </span>
-
-                                    <span class="btn btn-outline-success btn-sm mx-4" onclick="Increase('@item.ProductId')">
-                                        <i class="fa fa-plus fa-xs"></i>
-                                    </span>
-                                    </center>
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.TotalPrice)
-                                </td>
-
-                                <td>
-                                    <div>
-                                        <span class="btn btn-outline-danger btn-sm mx-4" onclick="RemoveItem('@item.ProductId')">
-                                            <i class="fa fa-times-circle fa-xs"></i>
-                                        </span>
-                                    </div>
-                                </td>
-            
-                            </tr>
-                    }
-                </tbody>
-            </table>
         </div>
-        
-        <!--Payment Panel-->
-        <div class = "col vh-100"> 
-            <h6>Paypal Payment</h6>
-        </div>
-
     </div>
-</div>
+    <!-- Breadcrumb End -->
+
+    <!-- Shop Cart Section Begin -->
+    <section class="shop-cart spad">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="shop__cart__table">
+                        <!--partial view start-->
+                        <div id="cartPV">
+                            
+                        </div>
+                        <!--partial view end-->
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-6 col-md-6 col-sm-6">
+                    <div class="cart__btn">
+                        <a href="./home">Continue Shopping</a>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-6">
+                    <div class="cart__btn update__btn">
+                        <a href="#" onclick="clearCart()" class="btn-outline-danger">
+                            <span class="text-dark fa fa-trash"></span>
+                            Clear cart
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-6">
+                    @*<div class="discount__content">
+                        <h6>Discount codes</h6>
+                        <form action="#">
+                            <input type="text" placeholder="Enter your coupon code">
+                            <button type="submit" class="site-btn">Apply</button>
+                        </form>
+                    </div>*@
+                </div>
+                <div class="col-lg-4 offset-lg-2">
+                    <div class="cart__total__procced">
+                        <h6>Cart total</h6>
+                        <ul>
+                            @*<li>Subtotal <span>$ 750.0</span></li>*@
+                            <li>Total <span>$ 750.0</span></li>
+                        </ul>
+                        <a href="#" class="primary-btn">Proceed to checkout</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Shop Cart Section End -->
+
+
 
 @section Scripts{
+
+    @*<partial name="Partial/Cart.cshtml" for="@Model"></partial>*@
+  
     <script>
 
-        function AddItem(){
+        getAllItems();
+        //addItem(2);
+       
+        function addItem(productID){
             $.ajax({
-                url: 'https://localhost:44327/cart/add/1',
+                url: `https://localhost:44327/cart/add/${productID}`,
                 method: 'POST',
-                //data: JSON.stringify(course),
                 contentType: 'application/json',
                 success: function (data) {
-                    //alert("Added");
-                },
-                error: function (error) {
-                    alert("error: " + error.statusText);
-                }
-            });
-        }
-
-        function RemoveItem(productID){
-            $.ajax({
-                url: `https://localhost:44327/cart/remove/${productID}`,
-                method: 'GET',
-                success: function (data) {
-                    //alert("Removed!");
+                    getAllItems();
                 },
                 error: function (error) {
                     alert("error: " + error.statusText);
@@ -128,7 +107,7 @@
                 url: 'https://localhost:44327/cart/clear',
                 method: 'GET',
                 success: function (data) {
-                    //alert("cleared!");
+                    getAllItems();
                 },
                 error: function (error) {
                     alert("error: " + error.statusText);
@@ -136,8 +115,47 @@
             });
         }
 
-        function Increase(productId) {
-            alert(productId);
+        function getAllItems(){
+            //$.ajax({
+            //    url: "https://localhost:44327/cart/getAllItems",
+            //    type: "GET",
+            //    //data: { year: ((val * 1) + 1) }
+            //})
+            //.done(function(partialViewResult) {
+            //    $("#cartPV").html(partialViewResult);
+            //})
+            //.fail(()=>{
+            //    alert("error loading partial view");
+            //});
+
+            
+            $.ajax({
+                url: `https://localhost:44327/cart/getAllItems`,
+                method: 'GET',
+                success: function (data) {
+                    $("#cartPV").html(data);
+                },
+                error: function (error) {
+                    alert("error loading partial view");
+                }
+            });
+        }        
+
+        function removeItem(productID){
+            $.ajax({
+                url: `https://localhost:44327/cart/remove/${productID}`,
+                method: 'GET',
+                success: function (data) {
+                   getAllItems();
+                },
+                error: function (error) {
+                    alert("error: " + error.statusText);
+                }
+            });
+        }
+
+        function increase(productId) {
+            //alert(productId);
             var product = {productId} 
 
             $.ajax({
@@ -146,7 +164,7 @@
                 data: JSON.stringify(product),
                 contentType: 'application/json',
                 success: function (data) {
-                    //alert("incresed");
+                    getAllItems();
                 },
                 error: function (error) {
                     alert("error: " + error.statusText);
@@ -155,16 +173,15 @@
         }
 
         function decrease(productId){
-            alert(productId);
+            
             var product = {productId} 
-            alert(product);
             $.ajax({
                 url: 'https://localhost:44327/cart/decrease',
                 method: 'POST',
                 data: JSON.stringify(product),
                 contentType: 'application/json',
                 success: function (data) {
-                    //alert("decreased");
+                    getAllItems();
                 },
                 error: function (error) {
                     alert("error: " + error.statusText);
@@ -172,6 +189,5 @@
             });
         }
 
-        
     </script>
 }

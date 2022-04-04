@@ -1,0 +1,50 @@
+﻿@model IEnumerable<ProjectMVC.Models.Cart>
+
+<table>
+    <thead>
+        <tr>
+            <th>Product</th>
+            <th>Price</th>
+            <th>Quantity</th>
+            <th>Total</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model){
+            <tr>
+                <td class="cart__product__item">
+                @*@item.Product.ImgPath*@
+                    <img src="img/shop-cart/cp-1.jpg" alt="">
+                    <div class="cart__product__item__title">
+                        <h6>Name: @item.Product.Name</h6>
+                        <h6>Description: @item.Product.Description</h6>
+                        <h6>In Stock: @item.Product.NumInStock</h6>
+                        <div class="rating">
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                        </div>
+                    </div>
+                </td>
+                <td class="cart__price">$ @item.Product.Price</td>
+                <td class="cart__quantity">
+                    <div class="">
+                        <span class = "btn btn-sm" onclick="decrease('@item.ProductId')"> <i class="fa fa-xs fa-minus"></i> </span>
+                        <span class = "h5">@item.Quntity</span>
+                        <span class = "btn btn-sm" onclick="increase('@item.ProductId')"> <i class="fa fa-xs fa-plus"></i> </span>
+                        @*<input type="text" value="@item.Quntity">*@
+                    </div>
+                </td>
+                <td class="cart__total">$ @item.TotalPrice</td>
+                <td class="cart__close">
+                    <span class="icon_close" onclick="removeItem('@item.ProductId')"></span>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+

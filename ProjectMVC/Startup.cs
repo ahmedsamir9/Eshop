@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Newtonsoft.Json.Serialization;
 using ProjectMVC.Models;
 using ProjectMVC.Services;
 using System;
@@ -39,6 +40,7 @@ namespace ProjectMVC
             services.AddScoped<ICategoryRepository, CatgoryRepoService>();
             services.AddScoped<IProductRepository, ProductRepoService>();
             services.AddScoped<ICartRepository, CartRepoService>();
+
 
 
             services.AddAuthentication( options =>

@@ -6,6 +6,7 @@ using System.Security.Claims;
 using ProjectMVC.Services;
 using System;
 using ProjectMVC.Models;
+using System.Collections.Generic;
 
 namespace ProjectMVC.Controllers
 {
@@ -19,6 +20,7 @@ namespace ProjectMVC.Controllers
         {
             _cartRepository = cartRepository;
             clientID = "75edb000-05a0-4889-bd96-2cef1e052532";
+            //ToDo: get current logged in user id 
             //clientID = User.FindFirst(ClaimTypes.NameIdentifier).Value;
         }
 
@@ -26,12 +28,20 @@ namespace ProjectMVC.Controllers
         // GET: Cart/Index
         public ActionResult Index()
         {
-            return View(_cartRepository.GetAllItems(clientID));
+            return View();
+        }
+
+
+        [HttpGet]
+        //GET: Cart/getAllItems
+        public ActionResult getAllItems()
+        {
+            return PartialView("Partial/Cart", _cartRepository.GetAllItems(clientID));
         }
 
 
         // GET: Cart/Remove/productID
-        
+
         [Route("Cart/Remove/{productID:int}")]
         public ActionResult Remove([FromRoute] int productID)
         {
@@ -73,18 +83,8 @@ namespace ProjectMVC.Controllers
         [Route("Cart/Add/{productID:int}")]
         public ActionResult Add([FromRoute] int productID)
         {
-            try
-            {
-                _cartRepository.AddItem(clientID, productID);
-                return Content("Added!");
-
-            }
-            catch (Exception e)
-            {
-                return Content($"Error : {e.Message}");
-            }
-
-            //return new EmptyResult();
+            _cartRepository.AddItem(clientID, productID);
+            return new EmptyResult();
         }
 
     }
