@@ -14,8 +14,7 @@ using ProjectMVC.ViewModel;
 
 namespace ProjectMVC.Controllers
 {
-    //[Authorize(Roles = "Admin")]
-
+    [Authorize(Roles = "Admin")]
     public class ProductsController : Controller
     {
        
@@ -181,6 +180,7 @@ namespace ProjectMVC.Controllers
            
             return RedirectToAction(nameof(Index));
         }
+
         [AllowAnonymous]
         public IActionResult ProductDetails(int id)
         {

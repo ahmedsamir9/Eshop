@@ -51,7 +51,7 @@ namespace ProjectMVC
                   Configuration.GetSection("Authentication:Google");
             options.ClientId = "269971474734-mtf6t0r602l1usql3rk0dl6s98e8dcgf.apps.googleusercontent.com";
             options.ClientSecret = "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";
-          
+           
         });
             services.AddScoped<IProductRepository, ProductRepoService>();
             services.AddScoped<ICategoryRepository, CatgoryRepoService>();

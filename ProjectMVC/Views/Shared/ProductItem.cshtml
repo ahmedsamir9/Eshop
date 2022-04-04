@@ -3,8 +3,8 @@
 
         <div class="col-lg-3 col-md-4 col-sm-6">
         <div class="product__item">
-            <div class="product__item__pic set-bg" data-setbg="~/img/@Model.ImgPath">
-           
+            <div class="product__item__pic set-bg text text-center" data-setbg="~/img/@Model.ImgPath">
+           <img src ="~/img/@Model.ImgPath"/>
             @if (@Model.NumInStock == 0)
             {
             <div class="label stockout">out of stock</div>     
@@ -13,9 +13,11 @@
                     <li><a href="~/img/@Model.ImgPath" class="image-popup"><span class="arrow_expand"></span></a></li>
                 </ul>
             </div>
+            
             <div class="product__item__text">
-                <h6><a href="#">@Model.Name</a></h6>
+                <h6><a asp-controller = "products" asp-action="productDetails" asp-route-id = "@Model.Id">@Model.Name</a></h6>
                 <div class="product__price">$ @Model.Price</div>
             </div>
+        
         </div>
     </div>
