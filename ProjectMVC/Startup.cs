@@ -34,7 +34,8 @@ namespace ProjectMVC
         {
             services.AddControllersWithViews();
             services.AddDbContext<ShopDBContext>(
-               option => option.UseSqlServer(Configuration.GetConnectionString("EShopDBCon")));
+               option => option.UseSqlServer(Configuration.GetConnectionString("EShopDBCon"))
+               .LogTo(s=>Console.WriteLine(s)));
             services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<ShopDBContext>();
 
             services.AddAuthentication( options =>
@@ -56,7 +57,7 @@ namespace ProjectMVC
             services.AddScoped<IProductRepository, ProductRepoService>();
             services.AddScoped<ICategoryRepository, CatgoryRepoService>();
 
-            //services.AddScopyd<GenericRepository<Product>,ProductRepositoryu>();
+            services.AddScoped<IProductBaseRepo,ProductRepositoryy>();
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
         }
 
@@ -76,12 +77,12 @@ namespace ProjectMVC
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
-            app.UseRouting();
+            app.UseRouting();//=>Product/details
             app.UseAuthentication();
 
             app.UseAuthorization();
 
-            app.UseEndpoints(endpoints =>
+            app.UseEndpoints(endpoints => //exe 
             {
                 endpoints.MapControllerRoute(
                     name: "default",

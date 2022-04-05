@@ -26,6 +26,7 @@ namespace ProjectMVC.Services
 
         public virtual IEnumerable<T> Find(Expression<Func<T, bool>> predicate)
         {
+          
             return Context.Set<T>()
                 .AsQueryable()
                 .Where(predicate).ToList();

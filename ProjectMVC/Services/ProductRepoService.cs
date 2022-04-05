@@ -21,7 +21,10 @@ namespace ProjectMVC.Services
 
         public List<Product> GetAll()
         {
-           return Context.products.Include(p => p.Category).ToList();
+           return Context.products.AsSplitQuery().Include(p => p.Category).ToList();
+            //left join cartisan 10*10 = 100 -> left 
+            // select 
+            // inner join category 
         }
 
         public Product GetDetails(int id)
