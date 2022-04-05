@@ -10,6 +10,10 @@ using System.IO;
 using Microsoft.AspNetCore.Hosting;
 using ProjectMVC.Services;
 using Microsoft.AspNetCore.Authorization;
+using ProjectMVC.ViewModel;
+using AutoMapper;
+using System.Linq.Expressions;
+using LinqKit;
 
 namespace ProjectMVC.Controllers
 {
@@ -18,15 +22,17 @@ namespace ProjectMVC.Controllers
     {
        
         private readonly IWebHostEnvironment webHostEnvironment;
-
+        private readonly IMapper _mapper;
         public IProductRepository ProductContext { get; }
         public ICategoryRepository CategoryContext { get; }
-
-        public ProductsController(IProductRepository productContext, ICategoryRepository categoryContext, IWebHostEnvironment webhost)
+        public readonly IProductBaseRepo ProductRepositoryy;
+        public ProductsController(IMapper mapper, IProductBaseRepo repositoryy,IProductRepository productContext, ICategoryRepository categoryContext, IWebHostEnvironment webhost)
         {
             webHostEnvironment = webhost;
             ProductContext = productContext;
             CategoryContext = categoryContext;
+            _mapper = mapper??throw new ArgumentNullException(nameof(mapper));
+            ProductRepositoryy = repositoryy?? throw new ArgumentNullException(nameof(repositoryy));
         }
         private string UploadFile(Product product)
         {
@@ -180,6 +186,34 @@ namespace ProjectMVC.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-       
+        [AllowAnonymous]
+        public IActionResult ProductDetails(int id)
+        {
+            var product = ProductRepositoryy.Get(id);
+
+            Expression<Func<Product, bool>> predicate = 
+                e => e.CategoryId == product.CategoryId && e.Id != product.Id;
+            
+            var relatedProducts =
+                ProductRepositoryy.GetRelatedProducts(predicate)
+                .Select(e=> _mapper.Map<ProductVM>(e));
+            
+            ViewBag.RelatedProducts = relatedProducts; 
+            
+            return View("ProductDetails",_mapper.Map<ProductVM>(product) );
+        }
+        [AllowAnonymous]
+        public IActionResult Shop()
+        {
+            int pageNumber = 1;
+            var predicate = PredicateBuilder.True<Product>();
+            var products = 
+                ProductRepositoryy.GetProductWitPaging(predicate,pageNumber).
+                Select(p=>_mapper.Map<ProductVM>(p));
+            ViewBag.Categories = CategoryContext.GetAll();
+            ViewBag.PagesCount = ProductRepositoryy.GetTotalProuductPages(predicate);
+            return View("ShopNavigator",products);
+        }
+
     }
 }

@@ -34,7 +34,8 @@ namespace ProjectMVC
         {
             services.AddControllersWithViews();
             services.AddDbContext<ShopDBContext>(
-               option => option.UseSqlServer(Configuration.GetConnectionString("EShopDBCon")));
+               option => option.UseSqlServer(Configuration.GetConnectionString("EShopDBCon"))
+               .LogTo(s=>Console.WriteLine(s)));
             services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<ShopDBContext>();
 
             services.AddAuthentication( options =>
@@ -61,8 +62,14 @@ namespace ProjectMVC
                  facebookOptions.AppSecret = "4ca04ccee723bbfe3d729944b88deb30";
 
              });
-            services.AddScoped<ICategoryRepository, CatgoryRepoService>();
+          
+
             services.AddScoped<IProductRepository, ProductRepoService>();
+            services.AddScoped<ICategoryRepository, CatgoryRepoService>();
+
+
+            services.AddScoped<IProductBaseRepo,ProductRepositoryy>();
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
         }
 
@@ -82,12 +89,12 @@ namespace ProjectMVC
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
-            app.UseRouting();
+            app.UseRouting();//=>Product/details
             app.UseAuthentication();
 
             app.UseAuthorization();
 
-            app.UseEndpoints(endpoints =>
+            app.UseEndpoints(endpoints => //exe 
             {
                 endpoints.MapControllerRoute(
                     name: "default",
