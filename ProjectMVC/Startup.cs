@@ -47,18 +47,30 @@ namespace ProjectMVC
                     options.LoginPath = "/Account/Login";
                 })
         .AddGoogle(options =>
-        {
+            {
             IConfigurationSection googleAuthNSection =
                   Configuration.GetSection("Authentication:Google");
             options.ClientId = "269971474734-mtf6t0r602l1usql3rk0dl6s98e8dcgf.apps.googleusercontent.com";
             options.ClientSecret = "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";
+             
            
-        });
+
+              })
+            .AddFacebook(facebookOptions =>
+             {
+                 facebookOptions.AppId = "497619958583488";
+                 facebookOptions.AppSecret = "4ca04ccee723bbfe3d729944b88deb30";
+
+             });
+          
+
             services.AddScoped<IProductRepository, ProductRepoService>();
             services.AddScoped<ICategoryRepository, CatgoryRepoService>();
 
+
             services.AddScoped<IProductBaseRepo,ProductRepositoryy>();
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
