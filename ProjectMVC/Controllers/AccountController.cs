@@ -164,11 +164,7 @@ namespace ProjectMVC.Controllers
                 return View("Login");
             }
         }
-       
-
-
-
-
+      
 
         [HttpGet]
         public async Task<IActionResult> Logout()
