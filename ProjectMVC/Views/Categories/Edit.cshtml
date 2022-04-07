@@ -4,11 +4,14 @@
     ViewData["Title"] = "Update Category";
 }
 
-<h1>Update @Model.Name Category</h1>
+<div class="content mt-5">
+    <div class="container">
+        
+<h3>Update @Model.Name Category</h3>
 
 
 <hr />
-<div class="row">
+        <div class="row">
     <div class="col-md-4">
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
@@ -26,12 +29,16 @@
                 <input type="submit" value="Update" class="btn btn-success float-right" />
                 <a class="btn btn-outline-secondary" asp-action="Index">Back to List</a>
             </div>
+            <input type="hidden" asp-for="Id"/>
+
         </form>
     </div>
 </div>
 
 <div>
     
+</div>
+    </div>
 </div>
 
 @section Scripts {

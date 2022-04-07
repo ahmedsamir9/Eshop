@@ -45,6 +45,7 @@ namespace ProjectMVC.Services
 
         public virtual T Update(T entity)
         {
+
             return Context.Update(entity)
                 .Entity;
         }
@@ -60,5 +61,9 @@ namespace ProjectMVC.Services
                .Entity;
         }
 
+        public T FindOne(Expression<Func<T, bool>> predicate)
+        {
+             return Context.Set<T>().FirstOrDefault(predicate);
+        }
     }
 }

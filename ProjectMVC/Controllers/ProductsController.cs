@@ -14,6 +14,7 @@ using ProjectMVC.ViewModel;
 using AutoMapper;
 using System.Linq.Expressions;
 using LinqKit;
+using ProjectMVC.Utils;
 
 namespace ProjectMVC.Controllers
 {
@@ -21,59 +22,24 @@ namespace ProjectMVC.Controllers
     public class ProductsController : Controller
     {
        
-        private readonly IWebHostEnvironment webHostEnvironment;
+        private readonly IImageHandler ImageHandler;
+
         private readonly IMapper _mapper;
-        public IProductRepository ProductContext { get; }
-        public ICategoryRepository CategoryContext { get; }
-        public readonly IProductBaseRepo ProductRepositoryy;
-        public ProductsController(IMapper mapper, IProductBaseRepo repositoryy,IProductRepository productContext, ICategoryRepository categoryContext, IWebHostEnvironment webhost)
+        public IBaseRepository<Category> CategoryRepository { get; }
+        public readonly IProductBaseRepo ProductRepository;
+        public ProductsController(IMapper mapper, IProductBaseRepo repositoryy, IBaseRepository<Category> categoryContext, IImageHandler imageHandler)
         {
-            webHostEnvironment = webhost;
-            ProductContext = productContext;
-            CategoryContext = categoryContext;
+            ImageHandler = imageHandler;
+            CategoryRepository = categoryContext;
             _mapper = mapper??throw new ArgumentNullException(nameof(mapper));
-            ProductRepositoryy = repositoryy?? throw new ArgumentNullException(nameof(repositoryy));
+            ProductRepository = repositoryy?? throw new ArgumentNullException(nameof(repositoryy));
         }
-        private string UploadFile(Product product)
-        {
-            string uniqueFileName = null;
-
-            if (product.ImageFile != null)
-            {
-                string uploadsFolder = Path.Combine(webHostEnvironment.WebRootPath,"images");
-                uniqueFileName=Guid.NewGuid().ToString()+"_"+product.ImageFile.FileName;
-                string filePath=Path.Combine(uploadsFolder,uniqueFileName);
-                using (var fileStream= new FileStream(filePath,FileMode.Create))
-                {
-                    product.ImageFile.CopyTo(fileStream);
-
-                }
-
-
-            }
-
-            return uniqueFileName;
-        }
-
-        private void RemoveFile(string imgPath)
-        {
-            
-                string image = Path.Combine(webHostEnvironment.WebRootPath, "images", imgPath);
-                FileInfo fi=new FileInfo(image);
-            if (fi != null)
-            {
-                System.IO.File.Delete(image);
-                fi.Delete();
-            }
-           
-        }
-
-
+      
         // GET: Products
         [AllowAnonymous]
         public ActionResult Index()
         {
-            var prdList = ProductContext.GetAll();
+            var prdList = ProductRepository.All();
             return View(prdList);
         }
 
@@ -81,7 +47,7 @@ namespace ProjectMVC.Controllers
         [AllowAnonymous]
         public ActionResult Details(int id)
         {
-            var product =ProductContext.GetDetails(id);
+            var product = ProductRepository.Get(id);
             if (product == null)
             {
                 return NotFound();
@@ -93,7 +59,7 @@ namespace ProjectMVC.Controllers
         public IActionResult Create()
         {
 
-            ViewData["CategoryId"] = new SelectList(CategoryContext.GetAll(), "Id", "Name");
+            ViewData["CategoryId"] = new SelectList(CategoryRepository.All(), "Id", "Name");
             return View();
         }
 
@@ -106,13 +72,15 @@ namespace ProjectMVC.Controllers
         {
             if (ModelState.IsValid)
             {
-                string uniqueFileName = UploadFile(product);
+                string uniqueFileName = ImageHandler.UploadImage(product);
                 product.ImgPath = uniqueFileName;
-                ProductContext.Insert(product);
-              
+                ProductRepository.Add(product);
+                ProductRepository.SaveChanges();
+
+
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CategoryId"] = new SelectList(CategoryContext.GetAll(), "Id", "Name");
+            ViewData["CategoryId"] = new SelectList(CategoryRepository.All(), "Id", "Name");
             return View(product);
         }
 
@@ -121,12 +89,12 @@ namespace ProjectMVC.Controllers
         {
 
 
-            var product = ProductContext.GetDetails(id);
+            var product = ProductRepository.Get(id);
             if (product == null)
             {
                 return NotFound();
             }
-            ViewData["CategoryId"] = new SelectList(CategoryContext.GetAll(), "Id", "Name", product.CategoryId);
+            ViewData["CategoryId"] = new SelectList(CategoryRepository.All(), "Id", "Name", product.CategoryId);
             return View(product);
         }
 
@@ -140,22 +108,20 @@ namespace ProjectMVC.Controllers
 
             if (ModelState.IsValid)
             {
-                 Product oldProduct = ProductContext.GetDetails(id);
-                    if (product.ImageFile == null)
-                    {
-                        product.ImgPath = oldProduct.ImgPath;
-                    }
-                    else
-                    {
-                        RemoveFile(oldProduct.ImgPath);
-                        product.ImgPath = UploadFile(product);
 
-                    }
-                    ProductContext.Update(id, product);
+              if (product.ImageFile!=null)
+                {
+                    ImageHandler.RemoveImage(product.ImgPath);
+                    product.ImgPath = ImageHandler.UploadImage(product);
+
+                }
+
+                    ProductRepository.Update( product);
+                    ProductRepository.SaveChanges();
                     return RedirectToAction(nameof(Index));
              
             }
-            ViewData["CategoryId"] = new SelectList(CategoryContext.GetAll(), "Id", "Name", product.CategoryId);
+            ViewData["CategoryId"] = new SelectList(CategoryRepository.All(), "Id", "Name", product.CategoryId);
             return View(product);
         }
 
@@ -163,7 +129,7 @@ namespace ProjectMVC.Controllers
         public ActionResult Delete(int id)
         {
 
-            var product = ProductContext.GetDetails(id);
+            var product = ProductRepository.Get(id);
               
             if (product == null)
             {
@@ -178,24 +144,26 @@ namespace ProjectMVC.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            var product =  ProductContext.GetDetails(id);
-            RemoveFile(product.ImgPath);
+            var product = ProductRepository.Get(id);
+            ImageHandler.RemoveImage(product.ImgPath);
 
-            ProductContext.Delete(id);
-           
+            ProductRepository.Delete(product);
+            ProductRepository.SaveChanges();
+
+
             return RedirectToAction(nameof(Index));
         }
 
         [AllowAnonymous]
         public IActionResult ProductDetails(int id)
         {
-            var product = ProductRepositoryy.Get(id);
+            var product = ProductRepository.Get(id);
 
             Expression<Func<Product, bool>> predicate = 
                 e => e.CategoryId == product.CategoryId && e.Id != product.Id;
             
             var relatedProducts =
-                ProductRepositoryy.GetRelatedProducts(predicate)
+                ProductRepository.GetRelatedProducts(predicate)
                 .Select(e=> _mapper.Map<ProductVM>(e));
             
             ViewBag.RelatedProducts = relatedProducts; 
@@ -207,11 +175,11 @@ namespace ProjectMVC.Controllers
         {
             int pageNumber = 1;
             var predicate = PredicateBuilder.True<Product>();
-            var products = 
-                ProductRepositoryy.GetProductWitPaging(predicate,pageNumber).
+            var products =
+                ProductRepository.GetProductWitPaging(predicate,pageNumber).
                 Select(p=>_mapper.Map<ProductVM>(p));
-            ViewBag.Categories = CategoryContext.GetAll();
-            ViewBag.PagesCount = ProductRepositoryy.GetTotalProuductPages(predicate);
+            ViewBag.Categories = CategoryRepository.All();
+            ViewBag.PagesCount = ProductRepository.GetTotalProuductPages(predicate);
             return View("ShopNavigator",products);
         }
 

@@ -1,4 +1,5 @@
 ﻿using LinqKit;
+using Microsoft.EntityFrameworkCore;
 using ProjectMVC.Models;
 using ProjectMVC.Utils;
 using System;
@@ -11,6 +12,21 @@ namespace ProjectMVC.Services
 
     public class ProductRepositoryy : GenericRepository<Product> ,IProductBaseRepo 
     {
+
+
+        public override IEnumerable<Product> All()
+        {
+            return Context.products.Include(p => p.Category).ToList();
+        }
+        public override Product Get(int id)
+        {
+
+
+            var product = Context.products.Include(p => p.Category).FirstOrDefault(p => p.Id == id);
+            return product;
+            //return base.Get(id);
+        }
+
         public ProductRepositoryy(ShopDBContext context) : base(context) { }
 
 
@@ -31,5 +47,9 @@ namespace ProjectMVC.Services
             return (int)Math.Ceiling((decimal)Context.products.Where(predicate).Count() / Constants.PRODUCT_NUMBERS);
 
         }
+
+
+
+      
     }
 }
