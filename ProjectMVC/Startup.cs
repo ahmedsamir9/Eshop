@@ -9,6 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using ProjectMVC.Models;
 using ProjectMVC.Services;
+using ProjectMVC.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -62,13 +63,17 @@ namespace ProjectMVC
                  facebookOptions.AppSecret = "4ca04ccee723bbfe3d729944b88deb30";
 
              });
-          
 
-            services.AddScoped<IProductRepository, ProductRepoService>();
-            services.AddScoped<ICategoryRepository, CatgoryRepoService>();
+            services.AddScoped<IImageHandler, ImageHandler>();
 
 
-            services.AddScoped<IProductBaseRepo,ProductRepositoryy>();
+            services.AddScoped<IProductBaseRepo, ProductRepositoryy>();
+
+            services.AddScoped<IBaseRepository<Category>, CategoryRepositary>();
+
+     
+
+
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
         }
