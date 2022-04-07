@@ -7,6 +7,7 @@ using ProjectMVC.Services;
 using System;
 using ProjectMVC.Models;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace ProjectMVC.Controllers
 {
@@ -19,7 +20,7 @@ namespace ProjectMVC.Controllers
         public CartController(ICartRepository cartRepository)
         {
             _cartRepository = cartRepository;
-            clientID = "75edb000-05a0-4889-bd96-2cef1e052532";
+            clientID = "52534c23-1187-48b1-9773-df9127f5fd8b";
             //ToDo: get current logged in user id 
             //clientID = User.FindFirst(ClaimTypes.NameIdentifier).Value;
         }
@@ -36,7 +37,10 @@ namespace ProjectMVC.Controllers
         //GET: Cart/getAllItems
         public ActionResult getAllItems()
         {
-            return PartialView("Partial/Cart", _cartRepository.GetAllItems(clientID));
+            var allItems = _cartRepository.GetAllItems(clientID);
+            var orderTotal = allItems.Sum(i => i.TotalPrice);
+            ViewBag.orderTotal = orderTotal;
+            return PartialView("Partial/Cart", allItems);
         }
 
 

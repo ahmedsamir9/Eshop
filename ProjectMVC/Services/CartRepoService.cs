@@ -16,7 +16,11 @@ namespace ProjectMVC.Services
         public void AddItem(string clientID, int productID)
         {
             Product product = context.products.Find(productID);
-           
+
+            var isOnCart = context.carts.FirstOrDefault(c => c.ProductId == productID && c.ClientId == clientID) != null;
+            if (isOnCart)
+                return;
+
             Cart cart = new Cart();
             cart.ClientId = clientID;
             cart.ProductId = productID;
