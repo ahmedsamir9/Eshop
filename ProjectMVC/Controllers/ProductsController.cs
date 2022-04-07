@@ -215,5 +215,23 @@ namespace ProjectMVC.Controllers
             return View("ShopNavigator",products);
         }
 
+        public IActionResult ShopPartial(int catId, int maxPrice, int minPrice, int pageNumber)
+        {
+            if(pageNumber == 0)
+                pageNumber = 1;
+            var predicate = PredicateBuilder.New<Product>();
+            if (catId != 0)
+                predicate = predicate.And(p => p.CategoryId == catId);
+            
+            predicate = predicate.And(p => p.Price <= maxPrice && p.Price >= minPrice);
+
+            var products =
+                ProductRepositoryy.GetProductWitPaging(predicate, pageNumber).
+                Select(p => _mapper.Map<ProductVM>(p));
+
+            ViewData["numOfPages"] = ProductRepositoryy.GetTotalProuductPages(predicate);
+            return PartialView("_Shop", products);
+        }
+
     }
 }
