@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Newtonsoft.Json.Serialization;
 using ProjectMVC.Models;
 using ProjectMVC.Services;
 using ProjectMVC.Utils;
@@ -34,15 +35,19 @@ namespace ProjectMVC
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+
             services.AddDbContext<ShopDBContext>(
                option => option.UseSqlServer(Configuration.GetConnectionString("EShopDBCon"))
                .LogTo(s=>Console.WriteLine(s)));
-            services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<ShopDBContext>();
+
+ 
+
 
             services.AddAuthentication( options =>
             {
                 options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
             })
+
                 .AddCookie(options =>
                 {
                     options.LoginPath = "/Account/Login";
@@ -72,9 +77,13 @@ namespace ProjectMVC
             services.AddScoped<IBaseRepository<Category>, CategoryRepositary>();
 
      
+           services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<ShopDBContext>();
+
+            services.AddScoped<ICartRepository, CartRepoService>();
 
 
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
 
         }
 
