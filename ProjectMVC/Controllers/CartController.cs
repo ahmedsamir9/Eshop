@@ -21,8 +21,8 @@ namespace ProjectMVC.Controllers
         {
             _cartRepository = cartRepository;
             clientID = "52534c23-1187-48b1-9773-df9127f5fd8b";
+
             //ToDo: get current logged in user id 
-            //clientID = User.FindFirst(ClaimTypes.NameIdentifier).Value;
         }
 
 
@@ -89,6 +89,19 @@ namespace ProjectMVC.Controllers
         {
             _cartRepository.AddItem(clientID, productID);
             return new EmptyResult();
+        }
+
+
+        [HttpGet]
+        public ActionResult PaymentSuccessful()
+        {
+            return View();
+        }
+
+        [HttpGet]
+        public ActionResult PaymentFailed()
+        {
+            return View();
         }
 
     }

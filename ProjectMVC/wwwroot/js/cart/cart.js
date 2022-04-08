@@ -1,11 +1,13 @@
-﻿alert("running cart.js");
+﻿////alert("running cart.js");
 
 
 getAllItems();
 
+//addItem(1);
 //addItem(2);
 
 function addItem(productID) {
+    //alert("adding item id " + productID);
     $.ajax({
         url: `https://localhost:44327/cart/add/${productID}`,
         method: 'POST',
@@ -34,6 +36,21 @@ function clearCart() {
 
 function getAllItems() {
 
+    $.ajax({
+        url: `https://localhost:44327/cart/getAllItems`,
+        method: 'GET',
+        success: function (data) {
+            $("#cartPV").html(data);
+            var orderTotal = "$ " + $("#ot").html();
+            //alert("total = " + orderTotal);
+            $("#orderTotal").html(orderTotal);
+        },
+        error: function (error) {
+            alert("error loading partial view");
+        }
+    });
+
+    // just another way to make the request
     //$.ajax({
     //    url: "https://localhost:44327/cart/getAllItems",
     //    type: "GET",
@@ -46,19 +63,6 @@ function getAllItems() {
     //    alert("error loading partial view");
     //});
 
-    $.ajax({
-        url: `https://localhost:44327/cart/getAllItems`,
-        method: 'GET',
-        success: function (data) {
-            $("#cartPV").html(data);
-            var orderTotal = "$ " + $("#ot").html();
-            alert("total = " + orderTotal);
-            $("#orderTotal").html(orderTotal);
-        },
-        error: function (error) {
-            alert("error loading partial view");
-        }
-    });
 }
 
 function removeItem(productID) {
