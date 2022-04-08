@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -14,9 +15,9 @@ namespace ProjectMVC.Controllers
     [Authorize(Roles = "Admin")]
     public class CategoriesController : Controller
     {
-        private readonly ICategoryRepository _context;
+        private readonly IBaseRepository<Category> _context;
 
-        public CategoriesController(ICategoryRepository context)
+        public CategoriesController(IBaseRepository<Category> context)
         {
             _context = context;
         }
@@ -25,14 +26,14 @@ namespace ProjectMVC.Controllers
         [AllowAnonymous]
         public ActionResult  Index()
         {
-            return View(_context.GetAll());
+            return View(_context.All());
         }
 
         // GET: Categories/Details/5
         [AllowAnonymous]
         public ActionResult Details(int id)
         {
-            var category = _context.GetDetails(id);
+            var category = _context.Get(id);
             if (category == null)
             {
                 return NotFound();
@@ -57,7 +58,8 @@ namespace ProjectMVC.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Insert(category);
+                _context.Add(category);
+                _context.SaveChanges();
               
                 return RedirectToAction(nameof(Index));
             }
@@ -68,7 +70,7 @@ namespace ProjectMVC.Controllers
         public ActionResult Edit(int id)
         {
 
-            var category = _context.GetDetails(id);
+            var category = _context.Get(id);
             if (category == null)
             {
                 return NotFound();
@@ -91,7 +93,8 @@ namespace ProjectMVC.Controllers
             if (ModelState.IsValid)
             {
                
-                _context.Update(id,category);
+                _context.Update(category);
+                _context.SaveChanges();
                 return RedirectToAction(nameof(Index));
             }
             return View(category);
@@ -101,7 +104,7 @@ namespace ProjectMVC.Controllers
         public ActionResult Delete(int id)
         {
            
-            var category = _context.GetDetails(id);
+            var category = _context.Get(id);
             if (category == null)
             {
                 return NotFound();
@@ -115,24 +118,17 @@ namespace ProjectMVC.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-           
-            _context.Delete(id);
-           
+            var category = _context.Get(id);
+            _context.Delete(category);
+            _context.SaveChanges();
+
             return RedirectToAction(nameof(Index));
         }
         public IActionResult Exsist(string Name, int id)
         {
-            if (id == 0)
-            {
-                var category = _context.GetDetails(id);
-                if (category == null)
-                    return Json(true);
-                return Json(false);
-
-            }
-            else
-            {
-                var category = _context.GetByName(Name);
+            Expression<Func<Category, bool>> predicate = c => c.Name == Name;
+            var category = _context.FindOne(predicate);
+         
                 if (category == null)
                     return Json(true);
                 else
@@ -141,7 +137,7 @@ namespace ProjectMVC.Controllers
                         return Json(true);
                     return Json(false);
                 }
-            }
+           
         }
 
     }

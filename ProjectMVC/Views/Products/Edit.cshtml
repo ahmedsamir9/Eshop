@@ -5,8 +5,10 @@
     ViewData["Title"] = "Edit Product";
 }
 
+<div class="content mt-5">
+    <div class="container">
 
-<div class="row">
+        <div class="row">
     <div class="col-md-4">
         <form enctype="multipart/form-data" asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
@@ -53,12 +55,20 @@
                  <img id="FrontImage" src="~/images/@Model.ImgPath" alt="Product Image" width="150" height="150" style="border:1px;margin-top:20px;margin-left:120px;"/>
 
             </div>
-           
+            <input type="hidden" asp-for="ImgPath"/>
+
             <div class="form-group">
                 <input type="submit" value="Update" class="btn btn-success float-right" />
                 <a class="btn btn-outline-secondary" asp-action="Index">Back to List</a>
             </div>
+
+
+
         </form>
+    </div>
+</div>
+
+
     </div>
 </div>
 
