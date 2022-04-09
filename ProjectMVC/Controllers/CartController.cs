@@ -84,10 +84,10 @@ namespace ProjectMVC.Controllers
 
         // POST: Cart/Add/ProductID
         [HttpPost]
-        [Route("Cart/Add/{productID:int}")]
-        public ActionResult Add([FromRoute] int productID)
+        [Route("Cart/Add/{productID:int}/{qty:int}")]
+        public ActionResult Add([FromRoute] int productID, [FromRoute] int qty)
         {
-            _cartRepository.AddItem(clientID, productID);
+            _cartRepository.AddItem(clientID, productID, qty);
             return new EmptyResult();
         }
 
