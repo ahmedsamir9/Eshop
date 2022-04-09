@@ -46,7 +46,7 @@ namespace ProjectMVC.Controllers
         }
       
         // GET: Products
-        [AllowAnonymous]
+     
         public ActionResult Index()
         {
             var prdList = ProductRepository.All();
@@ -54,7 +54,7 @@ namespace ProjectMVC.Controllers
         }
 
         // GET: Products/Details/5
-        [AllowAnonymous]
+ 
         public ActionResult Details(int id)
         {
             var product = ProductRepository.Get(id);
@@ -225,15 +225,16 @@ namespace ProjectMVC.Controllers
             ViewBag.PagesCount = ProductRepository.GetTotalProuductPages(predicate);
             return View("ShopNavigator",products);
         }
+
         [AllowAnonymous]
         public IActionResult ShopPartial(int catId, int maxPrice, int minPrice, int pageNumber)
         {
-            if(pageNumber == 0)
+            if (pageNumber == 0)
                 pageNumber = 1;
             var predicate = PredicateBuilder.New<Product>();
             if (catId != 0)
                 predicate = predicate.And(p => p.CategoryId == catId);
-            
+
             predicate = predicate.And(p => p.Price <= maxPrice && p.Price >= minPrice);
 
             var products = ProductRepository.GetProductWitPaging(predicate, pageNumber).
@@ -242,6 +243,7 @@ namespace ProjectMVC.Controllers
             ViewData["numOfPages"] = ProductRepository.GetTotalProuductPages(predicate);
             return PartialView("_Shop", products);
         }
+
 
     }
 }
