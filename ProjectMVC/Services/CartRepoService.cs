@@ -13,7 +13,7 @@ namespace ProjectMVC.Services
             this.context = context;
         }
 
-        public void AddItem(string clientID, int productID)
+        public void AddItem(string clientID, int productID,int qauntity)
         {
             Product product = context.products.Find(productID);
 
@@ -25,10 +25,10 @@ namespace ProjectMVC.Services
             cart.ClientId = clientID;
             cart.ProductId = productID;
             cart.dateTime = System.DateTime.Now;
-            cart.Quntity = 1;
+            cart.Quntity = qauntity;
 
             // represents total price of this item inside cart
-            cart.TotalPrice = product.Price;
+            cart.TotalPrice = product.Price*qauntity;
 
             context.carts.Add(cart);
             context.SaveChanges();

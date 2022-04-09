@@ -1,6 +1,7 @@
 ﻿@using ProjectMVC.ViewModel
 @model ProductVM
    
+   
     
     <!-- Product Details Section Begin -->
     <section class="product-details spad">
@@ -16,15 +17,19 @@
                         <h3>@Model.Name</h3>
                         
                         <div class="product__details__price">$ @Model.Price </div>
-                        <div class="product__details__button">
+                        <form id ="form1" asp-action ="AddProductToCart"asp-controller ="Products" 
+                            asp-route-prodID ="@Model.Id">
+                            <div class="product__details__button">
                             <div class="quantity">
                                 <span>Quantity:</span>
                                 <div class="pro-qty">
-                                    <input type="text" value="1" min="1">
+                                    <input type="text" value="1" min="1" max ="@Model.NumInStock" readonly="readonly" name="quantity">
                                 </div>
                             </div>
-                            <a href="#" class="cart-btn"><span class="icon_bag_alt"></span> Add to cart</a>
+                            <a href="#" onclick="document.getElementById('form1').submit();"
+                            class="cart-btn"><span class="icon_bag_alt"></span> Add to cart</a>
                          </div>
+                        </form>
                         </div>
                     </div>
                 </div>
@@ -59,3 +64,9 @@
     </div>
         </div>
     </section>
+      @if(ViewData["addMessage"] != null){
+        <script>
+            alert("@ViewData["addMessage"]");
+        </script>
+     }
+     
