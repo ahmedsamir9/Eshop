@@ -61,7 +61,7 @@ function initPayPalButton() {
                 //element.innerHTML = '';
                 //element.innerHTML = '<h3>Thank you for your payment!</h3>';
                 window.location.href = "https://localhost:44327/cart/PaymentSuccessful";
-                //clearCart();
+                clearCart();
             });
         },
         onCancel: function (data) {

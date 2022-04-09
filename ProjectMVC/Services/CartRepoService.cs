@@ -32,13 +32,13 @@ namespace ProjectMVC.Services
             cart.ClientId = clientID;
             cart.ProductId = productID;
             cart.dateTime = System.DateTime.Now;
-            cart.Quntity = 1;
+            cart.Quntity = qty;
             // represents total price of this item inside cart
-            cart.TotalPrice = product.Price*qauntity;
+            cart.TotalPrice = product.Price*qty;
 
             // add product to cart and decrease its numStock by 1
             context.carts.Add(cart);
-            product.NumInStock--;
+            product.NumInStock-=qty;
             productBaseRepo.Update(product);
 
             context.SaveChanges();
@@ -47,12 +47,7 @@ namespace ProjectMVC.Services
         public void ClearCart(string clientID)
         {
             var allItems = context.carts.Where(c => c.ClientId == clientID).ToList();
-            foreach(var item in allItems)
-            {
-                item.Product.NumInStock += item.Quntity;
-                productBaseRepo.Update(item.Product);
-            }
-
+           
             context.RemoveRange(allItems);
             // return all items to stock 
             context.SaveChanges();
