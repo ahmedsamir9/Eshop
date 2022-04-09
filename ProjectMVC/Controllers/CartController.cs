@@ -8,6 +8,7 @@ using System;
 using ProjectMVC.Models;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace ProjectMVC.Controllers
 {
@@ -16,26 +17,29 @@ namespace ProjectMVC.Controllers
     public class CartController : Controller
     {
         private readonly ICartRepository _cartRepository;
-        string clientID;
-        public CartController(ICartRepository cartRepository)
+        public UserManager<IdentityUser> UserManager { get; }
+        private static string clientID = "";
+        public CartController(ICartRepository cartRepository ,UserManager<IdentityUser> _UserManager )
         {
             _cartRepository = cartRepository;
-            clientID = "52534c23-1187-48b1-9773-df9127f5fd8b";
-
-            //ToDo: get current logged in user id 
+            UserManager = _UserManager;
+           
+             
         }
 
 
         // GET: Cart/Index
-        public ActionResult Index()
+        public async Task<IActionResult> Index()
         {
+            var user = await UserManager.FindByNameAsync(User.Identity.Name);
+            clientID = user.Id;
             return View();
         }
 
 
         [HttpGet]
         //GET: Cart/getAllItems
-        public ActionResult getAllItems()
+        public async Task<IActionResult> getAllItems()
         {
             var allItems = _cartRepository.GetAllItems(clientID);
             var orderTotal = allItems.Sum(i => i.TotalPrice);
@@ -47,14 +51,14 @@ namespace ProjectMVC.Controllers
         // GET: Cart/Remove/productID
 
         [Route("Cart/Remove/{productID:int}")]
-        public ActionResult Remove([FromRoute] int productID)
+        public async Task<IActionResult> Remove([FromRoute] int productID)
         {
             _cartRepository.RemoveItem(clientID, productID);
             return new EmptyResult();   
         }
 
         // GET: Cart/Clear
-        public ActionResult Clear()
+        public async Task<IActionResult> Clear()
         {
             _cartRepository.ClearCart(clientID);
             return new EmptyResult();
@@ -66,7 +70,7 @@ namespace ProjectMVC.Controllers
         //[Route("Cart/Increase/{productID:int}")]
         // POST: Cart/Increase
         [HttpPost]
-        public ActionResult Increase([FromBody] Cart c)
+        public async Task<IActionResult> Increase([FromBody] Cart c)
         {
             _cartRepository.IncreaseItemByOne(clientID, c.ProductId);
             return new EmptyResult();
@@ -75,7 +79,7 @@ namespace ProjectMVC.Controllers
         //[Route("Cart/Decrease/{productID:int}")]
         // POST: Cart/Decrease
         [HttpPost]
-        public ActionResult Decrease([FromBody] Cart c)
+        public async Task<IActionResult> Decrease([FromBody] Cart c)
         {
             _cartRepository.DecreaseItemByOne(clientID, c.ProductId);
             return new EmptyResult();
