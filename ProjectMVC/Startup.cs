@@ -46,11 +46,15 @@ namespace ProjectMVC
             services.AddAuthentication( options =>
             {
                 options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+            
+                options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                options.DefaultSignOutScheme = CookieAuthenticationDefaults.AuthenticationScheme;
             })
 
                 .AddCookie(options =>
                 {
                     options.LoginPath = "/Account/Login";
+                     options.LogoutPath="/Account/Logout";
                 })
         .AddGoogle(options =>
             {

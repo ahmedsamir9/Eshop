@@ -34,7 +34,7 @@ namespace ProjectMVC.Services
             cart.dateTime = System.DateTime.Now;
             cart.Quntity = 1;
             // represents total price of this item inside cart
-            cart.TotalPrice = product.Price;
+            cart.TotalPrice = product.Price*qauntity;
 
             // add product to cart and decrease its numStock by 1
             context.carts.Add(cart);

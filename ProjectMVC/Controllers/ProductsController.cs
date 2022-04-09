@@ -15,6 +15,7 @@ using AutoMapper;
 using System.Linq.Expressions;
 using LinqKit;
 using ProjectMVC.Utils;
+using Microsoft.AspNetCore.Identity;
 
 namespace ProjectMVC.Controllers
 {
@@ -25,11 +26,20 @@ namespace ProjectMVC.Controllers
         private readonly IImageHandler ImageHandler;
 
         private readonly IMapper _mapper;
-        public IBaseRepository<Category> CategoryRepository { get; }
+        public UserManager<IdentityUser> UserManager { get; }
+        private  IBaseRepository<Category> CategoryRepository { get; }
         public readonly IProductBaseRepo ProductRepository;
-        public ProductsController(IMapper mapper, IProductBaseRepo repositoryy, IBaseRepository<Category> categoryContext, IImageHandler imageHandler)
+        public readonly ICartRepository CartRepository;
+        public ProductsController(IMapper mapper, IProductBaseRepo repositoryy, 
+            IBaseRepository<Category> categoryContext, 
+            IImageHandler imageHandler,
+            ICartRepository _CartRepository
+            , UserManager<IdentityUser> _UserManager
+            )
         {
+            UserManager = _UserManager;
             ImageHandler = imageHandler;
+            CartRepository = _CartRepository;
             CategoryRepository = categoryContext;
             _mapper = mapper??throw new ArgumentNullException(nameof(mapper));
             ProductRepository = repositoryy?? throw new ArgumentNullException(nameof(repositoryy));
@@ -157,8 +167,10 @@ namespace ProjectMVC.Controllers
         [AllowAnonymous]
         public IActionResult ProductDetails(int id)
         {
-            var product = ProductRepository.Get(id);
+            var message = TempData["message"];
 
+            ViewData["addMessage"] = message;
+            var product = ProductRepository.Get(id);
             Expression<Func<Product, bool>> predicate = 
                 e => e.CategoryId == product.CategoryId && e.Id != product.Id;
             
@@ -169,6 +181,37 @@ namespace ProjectMVC.Controllers
             ViewBag.RelatedProducts = relatedProducts; 
             
             return View("ProductDetails",_mapper.Map<ProductVM>(product) );
+        }
+
+        [AllowAnonymous]
+        public async Task<IActionResult> AddProductToCart(int prodID, int quantity)
+        {
+            var product = ProductRepository.Get(prodID);
+            if (User.Identity.Name == null)
+            {
+                TempData["message"] = "your are not authed please sign in";
+            }
+            else if (quantity == 0)
+            {
+
+                TempData["message"] = "the Quantity can not be Zero";
+            }
+            else if (product.NumInStock == 0)
+            {
+                TempData["message"] = "The Product is Out of stock";
+            }
+            else if (product.NumInStock < quantity) {
+                TempData["message"] = "This quantity cannot t be servied";
+
+            }
+            else
+            {
+                var user = await UserManager.FindByNameAsync(User.Identity.Name);
+
+                CartRepository.AddItem(user.Id, prodID, quantity);
+                TempData["message"] = "added to Cart Successfully";
+            }
+            return RedirectToAction("ProductDetails",new {id =product.Id});
         }
         [AllowAnonymous]
         public IActionResult Shop()
@@ -183,7 +226,6 @@ namespace ProjectMVC.Controllers
             return View("ShopNavigator",products);
         }
 
-        
         [AllowAnonymous]
         public IActionResult ShopPartial(int catId, int maxPrice, int minPrice, int pageNumber)
         {
@@ -205,3 +247,4 @@ namespace ProjectMVC.Controllers
 
     }
 }
+
