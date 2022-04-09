@@ -1,0 +1,72 @@
+﻿@using ProjectMVC.ViewModel
+@model ProductVM
+   
+   
+    
+    <!-- Product Details Section Begin -->
+    <section class="product-details spad">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="product__details__pic">
+                        <img data-hash="product-4" class="product__big__img" src="~/images/@Model.ImgPath" alt="">
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="product__details__text">
+                        <h3>@Model.Name</h3>
+                        
+                        <div class="product__details__price">$ @Model.Price </div>
+                        <form id ="form1" asp-action ="AddProductToCart"asp-controller ="Products" 
+                            asp-route-prodID ="@Model.Id">
+                            <div class="product__details__button">
+                            <div class="quantity">
+                                <span>Quantity:</span>
+                                <div class="pro-qty">
+                                    <input type="text" value="1" min="1" max ="@Model.NumInStock" readonly="readonly" name="quantity">
+                                </div>
+                            </div>
+                            <a href="#" onclick="document.getElementById('form1').submit();"
+                            class="cart-btn"><span class="icon_bag_alt"></span> Add to cart</a>
+                         </div>
+                        </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-12">
+                    <div class="product__details__tab">
+                        <ul class="nav nav-tabs" role="tablist">
+                            <li class="nav-item">
+                                <a class="nav-link active" data-toggle="tab" href="#tabs-1" role="tab">Description</a>
+                            </li>    
+                        </ul>
+                        <div class="tab-content">
+                            <div class="tab-pane active" id="tabs-1" role="tabpanel">
+                                <h6>Description</h6>
+                                <p>@Model.Description</p>
+                            </div>
+                           
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12 text-center">
+                    <div class="related__title">
+                        <h5>RELATED PRODUCTS</h5>
+                    </div>
+                </div>
+                
+            @foreach (var item in ViewBag.RelatedProducts)
+            {
+            <partial name ="ProductItem" model = "@item" />
+            }  
+    </div>
+        </div>
+    </section>
+      @if(ViewData["addMessage"] != null){
+        <script>
+            alert("@ViewData["addMessage"]");
+        </script>
+     }
+     

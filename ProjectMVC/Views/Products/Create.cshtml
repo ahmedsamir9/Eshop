@@ -1,0 +1,88 @@
+﻿@model ProjectMVC.Models.Product
+
+@{
+    ViewData["Title"] = "Create New Product";
+}
+
+
+<div class="content mt-5">
+    <h3>Create Product</h3>
+
+<hr />
+    <div class="container">
+           <div class="row">
+    <div class="col-md-4">
+        <form enctype="multipart/form-data" asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+             <div class="form-group">
+                <label  class="control-label">Category </label>
+                <select asp-for="CategoryId" class ="form-control" asp-items="ViewBag.CategoryId"></select>
+            </div>
+           @* <div class="form-group">
+                <label asp-for="Description" class="control-label"></label>
+                <input asp-for="Description" class="form-control" />
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>*@
+             <div class="form-group">
+                <label asp-for="Description" class="control-label"></label>
+                <textarea asp-for="Description" class="form-control"></textarea>
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Price" class="control-label"></label>
+                <input asp-for="Price" class="form-control" />
+                <span asp-validation-for="Price" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="NumInStock" class="control-label"></label>
+                <input asp-for="NumInStock" class="form-control" />
+                <span asp-validation-for="NumInStock" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ImageFile" class="control-label"></label>
+                <div class="custom-file">
+                   <input asp-for="ImageFile" class="custom-file-input" id="productImage" 
+                   onchange="document.getElementById('FrontImage').src= window.URL.createObjectURL(this.files[0])" />
+                   <label class="custom-file-label" for="productImage">Choose file</label>
+                </div>
+                 <span asp-validation-for="ImageFile" class="text-danger"></span>
+
+                 <img id="FrontImage" src="" alt="Product Image" width="150" height="150" style="border:1px;margin-top:20px;margin-left:120px;"/>
+
+
+
+            </div>
+           
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-success float-right" />
+                <a class="btn btn-outline-secondary" asp-action="Index">Back to List</a>
+            </div>
+        </form>
+    </div>
+</div>
+    </div>
+</div>
+
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script type="text/javascript">
+    $(".custom-file-input").on("change",function(){
+
+        var fileName=$(this).val().split("\\").pop();
+        console.log(fileName);
+        $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+
+    });
+
+</script>
+}
+
+
