@@ -34,7 +34,7 @@ namespace ProjectMVC.Services
 
         public override IEnumerable<Order> Find(Expression<Func<Order, bool>> predicate)
         {
-            return Context.orders.Include(o => o.orderProducts).Where(predicate).ToList();
+            return Context.orders.Include(o => o.orderProducts).Where(predicate).OrderByDescending(o => o.dateTime).ToList();
         }
 
         public override Order Get(int id)
