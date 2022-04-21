@@ -3,9 +3,6 @@
 
 getAllItems();
 
-//addItem(1);
-//addItem(2);
-
 function addItem(productID) {
     //alert("adding item id " + productID);
     $.ajax({
@@ -22,6 +19,7 @@ function addItem(productID) {
 }
 
 function clearCart() {
+
     $.ajax({
         url: 'https://localhost:44327/cart/clear',
         method: 'GET',
@@ -30,6 +28,22 @@ function clearCart() {
         },
         error: function (error) {
             alert("error: " + error.statusText);
+        }
+    });
+}
+
+function toOrder() {
+    //alert("creating order...");
+
+    // create order
+    $.ajax({
+        url: 'https://localhost:44327/cart/ToOrder',
+        method: 'GET',
+        success: function (data) {
+            //alert("order Crearted!");
+        },
+        error: function (error) {
+            alert("error creating order: " + error.statusText);
         }
     });
 }
@@ -49,20 +63,6 @@ function getAllItems() {
             alert("error loading partial view");
         }
     });
-
-    // just another way to make the request
-    //$.ajax({
-    //    url: "https://localhost:44327/cart/getAllItems",
-    //    type: "GET",
-    //    //data: { year: ((val * 1) + 1) }
-    //})
-    //.done(function(partialViewResult) {
-    //    $("#cartPV").html(partialViewResult);
-    //})
-    //.fail(()=>{
-    //    alert("error loading partial view");
-    //});
-
 }
 
 function removeItem(productID) {
@@ -95,7 +95,6 @@ function increase(productId) {
         }
     });
 }
-
 
 function decrease(productId) {
 

@@ -11,5 +11,6 @@ namespace ProjectMVC.Services
         public void IncreaseItemByOne(string clientID, int productID);
         public void DecreaseItemByOne(string clientID, int productID);
         public void ClearCart(string clientID);
+        public void ToOrder(string clientID);
     }
 }

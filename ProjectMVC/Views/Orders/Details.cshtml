@@ -1,0 +1,57 @@
+﻿@model IEnumerable<ProjectMVC.Models.OrderProduct>
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<link rel="stylesheet" href="~/css/orders.css" type="text/css">
+
+<div class="container m-auto ff-cs">
+    <div class="m-4">
+        <table class="table table-bordered table-striped table-hover">
+
+            <thead class = "products-table-header">
+                <tr>
+                    <th> Product Name </th>
+                    <th> @Html.DisplayNameFor(model => model.Product.Description) </th>
+                    <th> @Html.DisplayNameFor(model => model.Quantity) </th>
+                    <th> Unit Price </th>                    
+                </tr>
+            </thead>
+            @{
+                double orderTotal = 0;
+            }
+            <tbody>
+                @foreach (var item in Model) {
+                    <tr>
+                        <td> @Html.DisplayFor(modelItem => item.Product.Name) </td>
+                        <td> @Html.DisplayFor(modelItem => item.Product.Description) </td>
+                        <td> @Html.DisplayFor(modelItem => item.Quantity) </td>
+                        <td> $@Html.DisplayFor(modelItem => item.Product.Price) </td>
+                    </tr>
+                    orderTotal += item.Product.Price * item.Quantity;
+                }
+                
+            </tbody>
+
+            <tfoot class = "products-table-footer">
+                <tr>
+                    @*<td colspan="3" align="right" style="padding-right: 50px;" >Order Total</td>*@
+                    <td colspan="3">Order Total</td>
+                    <td > $@orderTotal </td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+
+    <button class="btn-outline-secondary back-btn" onclick="backtoallorders()" >back to all orders</button>
+
+</div>
+
+
+<script>
+    function backtoallorders(){
+        window.location.href = "https://localhost:44327/orders";
+    }
+</script>
+

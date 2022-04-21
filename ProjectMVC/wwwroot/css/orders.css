@@ -1,0 +1,70 @@
+﻿.order-header {
+    /*background: #f99f9f;*/
+    /*background: #bd1523;*/
+    background: #ffc800;
+    padding: 8px 16px;
+    color: black;
+    border-radius: 8px;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.order-card {
+    box-shadow: 3px 3px 3px 3px #b2b2b2;
+    /*border: 2px solid #cccccc;*/
+    background: #fafafa;
+    border-radius: 16px;
+    font-family: 'Comic Sans MS';
+}
+
+.order-key{
+    font-weight: 600;
+    color: #050505;
+    font-size: 14px;
+}
+
+.order-val{
+    /*color:purple;*/
+    /*font-weight: 600;*/
+}
+
+.order-row{
+
+}
+
+.order-details-btn{
+    box-shadow: 1px 1px 1px 1px #b2b2b2;
+    font-size: 18px;
+    width:50%;
+}
+
+
+
+.products-table-header {
+    background: #ffc800;
+}
+
+.products-table-footer {
+    background: #ffc800;
+    font-weight: bold;
+}
+
+td{
+    border-color: black;
+}
+
+.ff-cs{
+    font-family: 'Comic Sans MS';
+}
+
+
+.back-btn {
+    border-radius: 5px;
+    box-shadow: 1px 1px 1px 1px #b2b2b2;
+    border: 0.25px solid black;
+}
+
+table {
+    box-shadow: 1px 1px 1px 1px #b2b2b2;
+    border-radius: 5px;
+}

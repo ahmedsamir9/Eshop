@@ -7,15 +7,14 @@ using System.Linq.Expressions;
 namespace ProjectMVC.Services
 {
 
-    public abstract class GenericRepository<T>
-        : IBaseRepository<T> where T : class
+    public abstract class GenericRepository<T> : IBaseRepository<T> where T : class
     {
+        public ShopDBContext Context { get; }
         public GenericRepository(ShopDBContext _Context)
         {
             Context = _Context;
         }
 
-        public ShopDBContext Context { get; }
 
         public virtual T Add(T entity)
         {

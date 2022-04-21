@@ -39,7 +39,7 @@ namespace ProjectMVC.Controllers
 
         [HttpGet]
         //GET: Cart/getAllItems
-        public async Task<IActionResult> getAllItems()
+        public IActionResult getAllItems()
         {
             var allItems = _cartRepository.GetAllItems(clientID);
             var orderTotal = allItems.Sum(i => i.TotalPrice);
@@ -51,16 +51,24 @@ namespace ProjectMVC.Controllers
         // GET: Cart/Remove/productID
 
         [Route("Cart/Remove/{productID:int}")]
-        public async Task<IActionResult> Remove([FromRoute] int productID)
+        public IActionResult Remove([FromRoute] int productID)
         {
             _cartRepository.RemoveItem(clientID, productID);
             return new EmptyResult();   
         }
 
         // GET: Cart/Clear
-        public async Task<IActionResult> Clear()
+        public IActionResult Clear()
         {
             _cartRepository.ClearCart(clientID);
+            return new EmptyResult();
+        }
+
+        // GET: Cart/ToOrder
+        [HttpGet]
+        public IActionResult ToOrder()
+        {
+            _cartRepository.ToOrder(clientID);
             return new EmptyResult();
         }
 
@@ -70,7 +78,7 @@ namespace ProjectMVC.Controllers
         //[Route("Cart/Increase/{productID:int}")]
         // POST: Cart/Increase
         [HttpPost]
-        public async Task<IActionResult> Increase([FromBody] Cart c)
+        public IActionResult Increase([FromBody] Cart c)
         {
             _cartRepository.IncreaseItemByOne(clientID, c.ProductId);
             return new EmptyResult();
@@ -79,7 +87,7 @@ namespace ProjectMVC.Controllers
         //[Route("Cart/Decrease/{productID:int}")]
         // POST: Cart/Decrease
         [HttpPost]
-        public async Task<IActionResult> Decrease([FromBody] Cart c)
+        public IActionResult Decrease([FromBody] Cart c)
         {
             _cartRepository.DecreaseItemByOne(clientID, c.ProductId);
             return new EmptyResult();

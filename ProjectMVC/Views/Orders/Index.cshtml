@@ -1,0 +1,57 @@
+﻿@model IEnumerable<ProjectMVC.Models.Order>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<link rel="stylesheet" href="~/css/orders.css" type="text/css">
+
+<div class="container m-5">
+    @foreach (var item in Model)
+    {
+        <div class="m-4 p-3 order-card">
+            <div class="row m-1 order-header">
+                Order No: @Html.DisplayFor(modelItem => item.Id)
+            </div>
+            <div class="row m-1">
+                <div class="col-8">
+                    <div class="row mx-1 my-2">
+                        <span class="order-key">
+                            Order Date: 
+                        </span>
+                        <span class="order-val"> 
+                            &ensp;
+                            @Html.DisplayFor(modelItem => item.dateTime.Date.Day)&nbsp;/
+                            @Html.DisplayFor(modelItem => item.dateTime.Date.Month)&nbsp;/
+                            @Html.DisplayFor(modelItem => item.dateTime.Date.Year)
+                            &ensp;&ensp;&ensp;                        
+                            @item.dateTime.ToShortTimeString()
+                        </span>
+                    </div>
+
+                    <div class="row mx-1 my-2">
+                        <span class="order-key">
+                            Order Total: &ensp;
+                        </span>
+                        <span class="order-val">
+                            $@Html.DisplayFor(modelItem => item.TotalPrice)
+                        </span>
+                    </div>
+                </div>
+
+                <div class="col mt-4 text-center">
+                    <button class="btn btn-outline-info order-details-btn" onclick="getDetails('@item.Id')"> show details </button>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+
+<script>
+
+    function getDetails(orderID) {
+        window.location.href = `https://localhost:44327/orders/details/${orderID}`;
+    }
+
+</script>

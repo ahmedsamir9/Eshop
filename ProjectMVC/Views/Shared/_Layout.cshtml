@@ -22,6 +22,7 @@
     <link rel="stylesheet" href="~/css/owl.carousel.min.css" type="text/css">
     <link rel="stylesheet" href="~/css/slicknav.min.css" type="text/css">
     <link rel="stylesheet" href="~/css/style.css" type="text/css">
+    @*<link rel="stylesheet" href="~/lib/twitter-bootstrap/css/bootstrap.css">*@
 
 </head>
 
@@ -84,8 +85,8 @@
                             <li><a asp-action="Shop" asp-controller="Products">Shop</a></li>
                             <li><a href="#">Pages</a>
                                 <ul class="dropdown">
-                                    <li><a asp-action="Index" asp-controller="Cart">Shop Cart</a></li>
-                                    <li><a href="./checkout.html">Checkout</a></li>
+                                    <li><a asp-action="Index" asp-controller="Cart">My Cart</a></li>
+                                    <li><a asp-action="Index" asp-controller="Orders">My Orders</a></li>
                                 </ul>
                             </li>
                             <li><a  asp-action="Contact" asp-controller="Home">Contact</a></li>
@@ -257,6 +258,12 @@
 <script src="~/js/owl.carousel.min.js"></script>
 <script src="~/js/jquery.nicescroll.min.js"></script>
 <script src="~/js/main.js"></script>
+<script
+    src="https://www.paypal.com/sdk/js?client-id=AYBBHk4lFAG3hze3QnAZce2efcSXI_9KVtEFdxapeVYhwO6KPqyipFfUpXL8SilUJbamGmiHhwur5LqR&components=buttons"
+    data-sdk-integration-source="button-factory" 
+    data-namespace="paypal"> 
+</script>
+
   @await RenderSectionAsync("Scripts", required: false)
 </body>
 

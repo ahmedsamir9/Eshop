@@ -28,7 +28,6 @@
                         orderTotal += item.TotalPrice;
                         <tr>
                             <td class="cart__product__item">
-                            @*@item.Product.ImgPath*@
                                 <img src="~/images/@item.Product.ImgPath" alt="">
                                 <div class="cart__product__item__title">
                                     <h6>Name: @item.Product.Name</h6>
@@ -81,17 +80,11 @@
     </div>
 </div>
 
+@*checkout box*@
+
 <div class="row">
     <div class="col-lg-6">
-        @*
-        <div class="discount__content">
-            <h6>Discount codes</h6>
-            <form action="#">
-                <input type="text" placeholder="Enter your coupon code">
-                <button type="submit" class="site-btn">Apply</button>
-            </form>
-        </div>
-        *@
+        
     </div>
     <div class="col-lg-4 offset-lg-2">
         <div class="cart__total__procced">
@@ -102,24 +95,19 @@
 
             <!-- button for modified code-->
             <div class="btn" id = "paypal-btn">
-                    @*<a href="#" class="primary-btn">Proceed to checkout </a>*@
             </div>
 
 
             <!-- button for generated code-->
             <div id="smart-button-container">
                 <div style="text-align: center;">
-                <div id="paypal-button-container"></div>
+                    <div id="paypal-button-container"></div>
                 </div>
             </div>
                     
         </div>
     </div>
 </div>
-
-
-    
-
 
     
 <script src="~/js/paypal/paypal.js"> </script>

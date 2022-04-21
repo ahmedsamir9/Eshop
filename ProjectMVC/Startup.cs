@@ -43,51 +43,32 @@ namespace ProjectMVC
  
 
 
-            services.AddAuthentication( options =>
-            {
-                options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-            
+            services.AddAuthentication( options => {
+                options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;            
                 options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
                 options.DefaultSignOutScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-            })
-
-                .AddCookie(options =>
-                {
-                    options.LoginPath = "/Account/Login";
-                     options.LogoutPath="/Account/Logout";
-                })
-        .AddGoogle(options =>
-            {
-            IConfigurationSection googleAuthNSection =
-                  Configuration.GetSection("Authentication:Google");
-            options.ClientId = "269971474734-mtf6t0r602l1usql3rk0dl6s98e8dcgf.apps.googleusercontent.com";
-            options.ClientSecret = "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";
-             
-           
-
-              })
-            .AddFacebook(facebookOptions =>
-             {
-                 facebookOptions.AppId = "497619958583488";
-                 facebookOptions.AppSecret = "4ca04ccee723bbfe3d729944b88deb30";
-
-             });
+            }).AddCookie(options => {
+                options.LoginPath = "/Account/Login";
+                options.LogoutPath="/Account/Logout";
+            }).AddGoogle(options => {
+                IConfigurationSection googleAuthNSection = Configuration.GetSection("Authentication:Google");
+                options.ClientId = "269971474734-mtf6t0r602l1usql3rk0dl6s98e8dcgf.apps.googleusercontent.com";
+                options.ClientSecret = "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";          
+            }).AddFacebook(facebookOptions => {
+                facebookOptions.AppId = "497619958583488";
+                facebookOptions.AppSecret = "4ca04ccee723bbfe3d729944b88deb30";
+            });
 
             services.AddScoped<IImageHandler, ImageHandler>();
-
-
             services.AddScoped<IProductBaseRepo, ProductRepositoryy>();
-
             services.AddScoped<IBaseRepository<Category>, CategoryRepositary>();
-
-     
-           services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<ShopDBContext>();
-
+            services.AddScoped<GenericRepository<Order>, OrderRepoService>();
+            services.AddScoped<GenericRepository<OrderProduct>, OrderProductRepoService>();
             services.AddScoped<ICartRepository, CartRepoService>();
 
-
+     
+            services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<ShopDBContext>();
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-
 
         }
 
