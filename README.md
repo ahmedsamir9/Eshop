@@ -36,16 +36,16 @@
   > then Run The Application
 
 ## ⚡ Technologies and Libraries 
-* .Net Core
-* Entity Framework
-* Tsql
+* ASP.NET Core
+* Entity Framework Core
+* Sql Server
 * Html/Css
 * JQuery
 * BootStrap
 * Rezor pages and Tags
 * AutoMappers 
 * Paypal Services
-* GoogleMaps
+* Google Maps
 * External Logins (Google,FaceBook)
 * Dependancy injection 
 * Generic Repositories
